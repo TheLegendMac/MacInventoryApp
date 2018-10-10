@@ -49,14 +49,14 @@ public final class InventoryContract {
          *
          * Type: String
          */
-        public final static String SUPPLIER_NAME = "supplier name";
+        public final static String SUPPLIER_NAME = "supplierName";
 
         /**
          * Supplier name of the inventory.
          *
          * Type: String
          */
-        public final static String SUPPLIER_NAME_NUMBER = "supplier phone number";
+        public final static String SUPPLIER_NAME_NUMBER = "supplierPhoneNumber";
 
     }
 
