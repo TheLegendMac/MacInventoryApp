@@ -31,8 +31,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -46,28 +44,39 @@ import com.example.markqueltaylor.macinventoryapp.data.ItemContract;
 public class EditorActivity extends AppCompatActivity implements
         android.app.LoaderManager.LoaderCallbacks<Cursor> {
 
-    /** Identifier for the pet data loader */
+    /**
+     * Identifier for the pet data loader
+     */
     private static final int EXISTING_PET_LOADER = 0;
 
-    /** Content URI for the existing pet (null if it's a new pet) */
+    /**
+     * Content URI for the existing pet (null if it's a new pet)
+     */
     private Uri mCurrentPetUri;
 
-    /** EditText field to enter the pet's name */
+    /**
+     * EditText field to enter the pet's name
+     */
     private EditText mNameEditText;
 
-    /** EditText field to enter the pet's breed */
+    /**
+     * EditText field to enter the pet's breed
+     */
     private EditText mBreedEditText;
 
-    /** EditText field to enter the pet's weight */
+    /**
+     * EditText field to enter the pet's weight
+     */
     private EditText mWeightEditText;
 
-    /** EditText field to enter the pet's gender */
+    /**
+     * EditText field to enter the pet's gender
+     */
     private Spinner mGenderSpinner;
 
-
-    private int mGender = ItemContract.ItemEntry.GENDER_UNKNOWN;
-
-    /** Boolean flag that keeps track of whether the pet has been edited (true) or not (false) */
+    /**
+     * Boolean flag that keeps track of whether the pet has been edited (true) or not (false)
+     */
     private boolean mPetHasChanged = false;
 
     /**
@@ -114,7 +123,6 @@ public class EditorActivity extends AppCompatActivity implements
         mNameEditText = (EditText) findViewById(R.id.edit_pet_name);
         mBreedEditText = (EditText) findViewById(R.id.edit_pet_breed);
         mWeightEditText = (EditText) findViewById(R.id.edit_pet_weight);
-        mGenderSpinner = (Spinner) findViewById(R.id.spinner_gender);
 
         // Setup OnTouchListeners on all the input fields, so we can determine if the user
         // has touched or modified them. This will let us know if there are unsaved changes
@@ -122,49 +130,10 @@ public class EditorActivity extends AppCompatActivity implements
         mNameEditText.setOnTouchListener(mTouchListener);
         mBreedEditText.setOnTouchListener(mTouchListener);
         mWeightEditText.setOnTouchListener(mTouchListener);
-        mGenderSpinner.setOnTouchListener(mTouchListener);
 
-        setupSpinner();
     }
 
-    /**
-     * Setup the dropdown spinner that allows the user to select the gender of the pet.
-     */
-    private void setupSpinner() {
-        // Create adapter for spinner. The list options are from the String array it will use
-        // the spinner will use the default layout
-        ArrayAdapter genderSpinnerAdapter = ArrayAdapter.createFromResource(this,
-                R.array.array_gender_options, android.R.layout.simple_spinner_item);
 
-        // Specify dropdown layout style - simple list view with 1 item per line
-        genderSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
-
-        // Apply the adapter to the spinner
-        mGenderSpinner.setAdapter(genderSpinnerAdapter);
-
-        // Set the integer mSelected to the constant values
-        mGenderSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String selection = (String) parent.getItemAtPosition(position);
-                if (!TextUtils.isEmpty(selection)) {
-                    if (selection.equals(getString(R.string.gender_male))) {
-                        mGender = ItemContract.ItemEntry.GENDER_MALE;
-                    } else if (selection.equals(getString(R.string.gender_female))) {
-                        mGender = ItemContract.ItemEntry.GENDER_FEMALE;
-                    } else {
-                        mGender = ItemContract.ItemEntry.GENDER_UNKNOWN;
-                    }
-                }
-            }
-
-            // Because AdapterView is an abstract class, onNothingSelected must be defined
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                mGender = ItemContract.ItemEntry.GENDER_UNKNOWN;
-            }
-        });
-    }
 
     /**
      * Get user input from editor and save pet into database.
@@ -180,7 +149,7 @@ public class EditorActivity extends AppCompatActivity implements
         // and check if all the fields in the editor are blank
         if (mCurrentPetUri == null &&
                 TextUtils.isEmpty(nameString) && TextUtils.isEmpty(breedString) &&
-                TextUtils.isEmpty(weightString) && mGender == ItemContract.ItemEntry.GENDER_UNKNOWN) {
+                TextUtils.isEmpty(weightString)) {
             // Since no fields were modified, we can return early without creating a new pet.
             // No need to create ContentValues and no need to do any ContentProvider operations.
             return;
@@ -189,16 +158,17 @@ public class EditorActivity extends AppCompatActivity implements
         // Create a ContentValues object where column names are the keys,
         // and pet attributes from the editor are the values.
         ContentValues values = new ContentValues();
-        values.put(ItemContract.ItemEntry.COLUMN_PET_NAME, nameString);
-        values.put(ItemContract.ItemEntry.COLUMN_PET_BREED, breedString);
-        values.put(ItemContract.ItemEntry.COLUMN_PET_GENDER, mGender);
+        values.put(ItemContract.ItemEntry.PRODUCT_NAME, nameString);
+        values.put(ItemContract.ItemEntry.PRICE, breedString);
         // If the weight is not provided by the user, don't try to parse the string into an
         // integer value. Use 0 by default.
         int weight = 0;
         if (!TextUtils.isEmpty(weightString)) {
             weight = Integer.parseInt(weightString);
         }
-        values.put(ItemContract.ItemEntry.COLUMN_PET_WEIGHT, weight);
+        values.put(ItemContract.ItemEntry.QUANTITY, weight);
+        values.put(ItemContract.ItemEntry.SUPPLIER_NAME, "Amco");
+        values.put(ItemContract.ItemEntry.SUPPLIER_NAME_NUMBER, "999999999");
 
         // Determine if this is a new or existing pet by checking if mCurrentPetUri is null or not
         if (mCurrentPetUri == null) {
@@ -335,10 +305,12 @@ public class EditorActivity extends AppCompatActivity implements
         // all columns from the pet table
         String[] projection = {
                 ItemContract.ItemEntry._ID,
-                ItemContract.ItemEntry.COLUMN_PET_NAME,
-                ItemContract.ItemEntry.COLUMN_PET_BREED,
-                ItemContract.ItemEntry.COLUMN_PET_GENDER,
-                ItemContract.ItemEntry.COLUMN_PET_WEIGHT };
+                ItemContract.ItemEntry.PRODUCT_NAME,
+                ItemContract.ItemEntry.PRICE,
+                ItemContract.ItemEntry.QUANTITY,
+                ItemContract.ItemEntry.SUPPLIER_NAME,
+                ItemContract.ItemEntry.SUPPLIER_NAME_NUMBER,
+        };
 
         // This loader will execute the ContentProvider's query method on a background thread
         return new CursorLoader(this,   // Parent activity context
@@ -360,10 +332,10 @@ public class EditorActivity extends AppCompatActivity implements
         // (This should be the only row in the cursor)
         if (cursor.moveToFirst()) {
             // Find the columns of pet attributes that we're interested in
-            int nameColumnIndex = cursor.getColumnIndex(ItemContract.ItemEntry.COLUMN_PET_NAME);
-            int breedColumnIndex = cursor.getColumnIndex(ItemContract.ItemEntry.COLUMN_PET_BREED);
-            int genderColumnIndex = cursor.getColumnIndex(ItemContract.ItemEntry.COLUMN_PET_GENDER);
-            int weightColumnIndex = cursor.getColumnIndex(ItemContract.ItemEntry.COLUMN_PET_WEIGHT);
+            int nameColumnIndex = cursor.getColumnIndex(ItemContract.ItemEntry.PRODUCT_NAME);
+            int breedColumnIndex = cursor.getColumnIndex(ItemContract.ItemEntry.PRICE);
+            int genderColumnIndex = cursor.getColumnIndex(ItemContract.ItemEntry.SUPPLIER_NAME);
+            int weightColumnIndex = cursor.getColumnIndex(ItemContract.ItemEntry.QUANTITY);
 
             // Extract out the value from the Cursor for the given column index
             String name = cursor.getString(nameColumnIndex);
@@ -376,20 +348,6 @@ public class EditorActivity extends AppCompatActivity implements
             mBreedEditText.setText(breed);
             mWeightEditText.setText(Integer.toString(weight));
 
-            // Gender is a dropdown spinner, so map the constant value from the database
-            // into one of the dropdown options (0 is Unknown, 1 is Male, 2 is Female).
-            // Then call setSelection() so that option is displayed on screen as the current selection.
-            switch (gender) {
-                case ItemContract.ItemEntry.GENDER_MALE:
-                    mGenderSpinner.setSelection(1);
-                    break;
-                case ItemContract.ItemEntry.GENDER_FEMALE:
-                    mGenderSpinner.setSelection(2);
-                    break;
-                default:
-                    mGenderSpinner.setSelection(0);
-                    break;
-            }
         }
     }
 

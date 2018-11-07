@@ -58,8 +58,8 @@ public class ItemCursorAdapter extends CursorAdapter {
         TextView tvName = view.findViewById(R.id.name);
         TextView tvSummary = view.findViewById(R.id.summary);
         //Extract properties from cursor
-        String name = cursor.getString(cursor.getColumnIndexOrThrow(ItemContract.ItemEntry.COLUMN_PET_NAME));
-        String summary = cursor.getString(cursor.getColumnIndexOrThrow(ItemContract.ItemEntry.COLUMN_PET_BREED));
+        String name = cursor.getString(cursor.getColumnIndexOrThrow(ItemContract.ItemEntry.PRODUCT_NAME));
+        String summary = cursor.getString(cursor.getColumnIndexOrThrow(ItemContract.ItemEntry.PRICE));
         // Populate fields with extracted properties
         tvName.setText(name);
         tvSummary.setText(String.valueOf(summary));

@@ -3,9 +3,11 @@ package com.example.markqueltaylor.macinventoryapp;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+
+import com.example.markqueltaylor.macinventoryapp.data.ItemContract;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -32,16 +34,17 @@ public class MainActivity extends AppCompatActivity {
         SQLiteDatabase db = mDbHelper.getReadableDatabase();
 
         String[] projection = {
-                InventoryContract.InventoryEntry._ID,
-                InventoryContract.InventoryEntry.PRODUCT_NAME,
-                InventoryContract.InventoryEntry.PRICE,
-                InventoryContract.InventoryEntry.SUPPLIER_NAME,
-                InventoryContract.InventoryEntry.SUPPLIER_NAME_NUMBER,
+                ItemContract.ItemEntry._ID,
+                ItemContract.ItemEntry.PRODUCT_NAME,
+                ItemContract.ItemEntry.PRICE,
+                ItemContract.ItemEntry.QUANTITY,
+                ItemContract.ItemEntry.SUPPLIER_NAME,
+                ItemContract.ItemEntry.SUPPLIER_NAME_NUMBER,
 
         };
 
         Cursor cursor = db.query(
-                InventoryContract.InventoryEntry.TABLE_NAME,
+                ItemContract.ItemEntry.TABLE_NAME,
                 projection,
                 null,
                 null,
@@ -59,13 +62,13 @@ public class MainActivity extends AppCompatActivity {
 
         ContentValues values = new ContentValues();
 
-        values.put(InventoryContract.InventoryEntry.PRODUCT_NAME, "Rice");
-        values.put(InventoryContract.InventoryEntry.PRICE, "$11.99");
-        values.put(InventoryContract.InventoryEntry.QUANTITY, 1);
-        values.put(InventoryContract.InventoryEntry.SUPPLIER_NAME, "Mojang");
-        values.put(InventoryContract.InventoryEntry.SUPPLIER_NAME_NUMBER, 9999999);
+        values.put(ItemContract.ItemEntry.PRODUCT_NAME, "Rice");
+        values.put(ItemContract.ItemEntry.PRICE, "$11.99");
+        values.put(ItemContract.ItemEntry.QUANTITY, 1);
+        values.put(ItemContract.ItemEntry.SUPPLIER_NAME, "Mojang");
+        values.put(ItemContract.ItemEntry.SUPPLIER_NAME_NUMBER, 9999999);
 
-        long newRowId = db.insert(InventoryContract.InventoryEntry.TABLE_NAME, null, values);
+        long newRowId = db.insert(ItemContract.ItemEntry.TABLE_NAME, null, values);
 
         Log.i("Catalog Activity", "Number of inventory items: " + newRowId);
     }

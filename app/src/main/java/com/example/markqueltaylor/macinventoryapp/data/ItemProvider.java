@@ -9,6 +9,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.util.Log;
 
+import com.example.markqueltaylor.macinventoryapp.InventoryDbHelper;
+
+
 /**
  * {@link ContentProvider} for Pets app.
  */
@@ -45,7 +48,7 @@ public class ItemProvider extends ContentProvider {
         // The content URI of the form "content://com.example.android.pets/pets" will map to the
         // integer code {@link #PETS}. This URI is used to provide access to MULTIPLE rows
         // of the pets table.
-        sUriMatcher.addURI(ItemContract.CONTENT_AUTHORITY, ItemContract.PATH_ITEMS, ITEMS);
+        sUriMatcher.addURI(ItemContract.CONTENT_AUTHORITY, ItemContract.PATH_ITEM, ITEMS);
 
         // The content URI of the form "content://com.example.android.pets/pets/#" will map to the
         // integer code {@link #ITEM_ID}. This URI is used to provide access to ONE single row
@@ -54,17 +57,17 @@ public class ItemProvider extends ContentProvider {
         // In this case, the "#" wildcard is used where "#" can be substituted for an integer.
         // For example, "content://com.example.android.pets/pets/3" matches, but
         // "content://com.example.android.pets/pets" (without a number at the end) doesn't match.
-        sUriMatcher.addURI(ItemContract.CONTENT_AUTHORITY, ItemContract.PATH_ITEMS + "/#", ITEM_ID);
+        sUriMatcher.addURI(ItemContract.CONTENT_AUTHORITY, ItemContract.PATH_ITEM + "/#", ITEM_ID);
     }
 
     /**
      * Database helper object
      */
-    private ItemDbHelper mDbHelper;
+    private InventoryDbHelper mDbHelper;
 
     @Override
     public boolean onCreate() {
-        mDbHelper = new ItemDbHelper(getContext());
+        mDbHelper = new InventoryDbHelper(getContext());
         return true;
     }
 
@@ -134,19 +137,13 @@ public class ItemProvider extends ContentProvider {
      */
     private Uri insertPet(Uri uri, ContentValues values) {
         // Check that the name is not null
-        String name = values.getAsString(ItemContract.ItemEntry.COLUMN_PET_NAME);
+        String name = values.getAsString(ItemContract.ItemEntry.PRODUCT_NAME);
         if (name == null) {
             throw new IllegalArgumentException("Pet requires a name");
         }
 
-        // Check that the gender is valid
-        Integer gender = values.getAsInteger(ItemContract.ItemEntry.COLUMN_PET_GENDER);
-        if (gender == null || !ItemContract.ItemEntry.isValidGender(gender)) {
-            throw new IllegalArgumentException("Pet requires valid gender");
-        }
-
         // If the weight is provided, check that it's greater than or equal to 0 kg
-        Integer weight = values.getAsInteger(ItemContract.ItemEntry.COLUMN_PET_WEIGHT);
+        Integer weight = values.getAsInteger(ItemContract.ItemEntry.QUANTITY);
         if (weight != null && weight < 0) {
             throw new IllegalArgumentException("Pet requires valid weight");
         }
@@ -206,29 +203,20 @@ public class ItemProvider extends ContentProvider {
      * Return the number of rows that were successfully updated.
      */
     private int updatePet(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
-        // If the {@link ItemEntry#COLUMN_PET_NAME} key is present,
+        // If the {@link ItemEntry#PRODUCT_NAME} key is present,
         // check that the name value is not null.
-        if (values.containsKey(ItemContract.ItemEntry.COLUMN_PET_NAME)) {
-            String name = values.getAsString(ItemContract.ItemEntry.COLUMN_PET_NAME);
+        if (values.containsKey(ItemContract.ItemEntry.PRODUCT_NAME)) {
+            String name = values.getAsString(ItemContract.ItemEntry.PRODUCT_NAME);
             if (name == null) {
                 throw new IllegalArgumentException("Pet requires a name");
             }
         }
 
-        // If the {@link ItemEntry#COLUMN_PET_GENDER} key is present,
-        // check that the gender value is valid.
-        if (values.containsKey(ItemContract.ItemEntry.COLUMN_PET_GENDER)) {
-            Integer gender = values.getAsInteger(ItemContract.ItemEntry.COLUMN_PET_GENDER);
-            if (gender == null || !ItemContract.ItemEntry.isValidGender(gender)) {
-                throw new IllegalArgumentException("Pet requires valid gender");
-            }
-        }
-
         // If the {@link ItemEntry#COLUMN_PET_WEIGHT} key is present,
         // check that the weight value is valid.
-        if (values.containsKey(ItemContract.ItemEntry.COLUMN_PET_WEIGHT)) {
+        if (values.containsKey(ItemContract.ItemEntry.QUANTITY)) {
             // Check that the weight is greater than or equal to 0 kg
-            Integer weight = values.getAsInteger(ItemContract.ItemEntry.COLUMN_PET_WEIGHT);
+            Integer weight = values.getAsInteger(ItemContract.ItemEntry.QUANTITY);
             if (weight != null && weight < 0) {
                 throw new IllegalArgumentException("Pet requires valid weight");
             }
