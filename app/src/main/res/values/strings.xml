@@ -20,10 +20,10 @@
     <string name="action_delete_all_entries">Delete All items</string>
 
     <!-- Title text for the empty view, which describes the empty dog house image [CHAR LIMIT=50] -->
-    <string name="empty_view_title_text">It\'s a bit lonely here...</string>
+    <string name="empty_view_title_text">What are you waiting for?</string>
 
     <!-- Subtitle text for the empty view that prompts the user to add a item [CHAR LIMIT=50] -->
-    <string name="empty_view_subtitle_text">Get started by adding a item</string>
+    <string name="empty_view_subtitle_text">Get started by adding a item below</string>
 
     <!-- Title for the activity to add a new item [CHAR LIMIT=20] -->
     <string name="editor_activity_title_new_item">Add an Item</string>
@@ -41,16 +41,16 @@
     <string name="editor_insert_item_successful">Item saved</string>
 
     <!-- Toast message in editor when new item has failed to be inserted [CHAR LIMIT=NONE] -->
-    <string name="editor_insert_item_failed">Error with saving item</string>
+    <string name="editor_insert_item_failed">Error with saving this item</string>
 
     <!-- Toast message in editor when current item was successfully updated [CHAR LIMIT=NONE] -->
     <string name="editor_update_item_successful">Item updated</string>
 
     <!-- Toast message in editor when current item has failed to be updated [CHAR LIMIT=NONE] -->
-    <string name="editor_update_item_failed">Error with updating item</string>
+    <string name="editor_update_item_failed">Error with updating your item</string>
 
     <!-- Dialog message when user is leaving editor but hasn't saved changes [CHAR LIMIT=NONE] -->
-    <string name="unsaved_changes_dialog_msg">Discard your changes and quit editing?</string>
+    <string name="unsaved_changes_dialog_msg">Discard your changes?</string>
 
     <!-- Dialog button text for the option to discard a user's changes [CHAR LIMIT=20] -->
     <string name="discard">Discard</string>
@@ -62,7 +62,7 @@
     <string name="editor_delete_item_successful">Item deleted</string>
 
     <!-- Toast message in editor when current item has failed to be deleted [CHAR LIMIT=NONE] -->
-    <string name="editor_delete_item_failed">Error with deleting item</string>
+    <string name="editor_delete_item_failed">Error deleting this item</string>
 
     <!-- Dialog message to ask the user to confirm deleting the current item [CHAR LIMIT=NONE] -->
     <string name="delete_dialog_msg">Delete this item?</string>
@@ -76,33 +76,33 @@
     <!-- Label for overview category of attributes in the editor [CHAR LIMIT=30] -->
     <string name="category_overview">Overview</string>
 
-    <!-- Label for gender information in the editor [CHAR LIMIT=30] -->
-    <string name="category_gender">Gender</string>
-
     <!-- Label for measurement information in the editor [CHAR LIMIT=30] -->
-    <string name="category_measurement">Measurement</string>
+    <string name="category_price">Amount of</string>
 
-    <!-- Text hint for name field in the editor [CHAR LIMIT=30] -->
-    <string name="hint_item_name">Name</string>
+    <!-- Text hint for product_name field in the editor [CHAR LIMIT=30] -->
+    <string name="hint_item_name">Product Name</string>
 
     <!-- Text hint for breed field in the editor [CHAR LIMIT=30] -->
-    <string name="hint_item_breed">Breed</string>
+    <string name="hint_item">Price</string>
 
-    <!-- Text hint for name field in the editor [CHAR LIMIT=30] -->
-    <string name="hint_item_weight">Weight</string>
+    <!-- Text hint for product_name field in the editor [CHAR LIMIT=30] -->
+    <string name="hint_item_quantity">Item Count</string>
 
-    <!-- Units for weight of the item (kilograms) [CHAR LIMIT=5] -->
-    <string name="unit_item_weight">kg</string>
-
-    <!-- Label for dropdown menu option if the item's gender is unknown [CHAR LIMIT=20] -->
-    <string name="gender_unknown">Unknown</string>
-
-    <!-- Label for dropdown menu option if the item is male [CHAR LIMIT=20] -->
-    <string name="gender_male">Male</string>
-
-    <!-- Label for dropdown menu option if the item is female [CHAR LIMIT=20] -->
-    <string name="gender_female">Female</string>
-
-    <!-- Label for the item's breed if the breed is unknown [CHAR LIMIT=20] -->
-    <string name="unknown_item">Unknown item</string>
+    <string name="unit_item_weight">items</string>
+    <string name="supplier_info_txt">Supplier Info</string>
+    <string name="supplier_name_text">Supplier Name</string>
+    <string name="supplier_phone_number_text">Supplier Phone Number</string>
+    <string name="no_less_than_0_message">Hey! No less than 0.</string>
+    <string name="dummy_product_name">Box of Milky Way</string>
+    <string name="dummy_product_price">9.99</string>
+    <string name="dummy_supplier_name">Mars</string>
+    <string name="dummy_phone_number">999-999-9999</string>
+    <string name="tel_text">tel:</string>
+    <string name="sell_one_text">Sell One</string>
+    <string name="values_message">Values returned from table:</string>
+    <string name="rows_deleted">rows deleted from item database</string>
+    <string name="quantity_text">Quantity </string>
+    <string name="no_items_to_sell_toast">No more items to sell</string>
+    <string name="failed_insert_row_message">Failed to insert row for</string>
+    <string name="update_not_supported_message">Update is not supported for</string>
 </resources>

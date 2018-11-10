@@ -36,16 +36,22 @@ import android.widget.ListView;
 import com.example.markqueltaylor.macinventoryapp.data.ItemContract;
 import com.example.markqueltaylor.macinventoryapp.data.ItemCursorAdapter;
 
+import static com.example.markqueltaylor.macinventoryapp.InventoryDbHelper.LOG_TAG;
+
 /**
- * Displays list of pets that were entered and stored in the app.
+ * Displays list of items that were entered and stored in the app.
  */
 public class CatalogActivity extends AppCompatActivity implements
         LoaderManager.LoaderCallbacks<Cursor> {
 
-    /** Identifier for the pet data loader */
-    private static final int PET_LOADER = 0;
+    /**
+     * Identifier for the item data loader
+     */
+    private static final int ITEM_LOADER = 0;
 
-    /** Adapter for the ListView */
+    /**
+     * Adapter for the ListView
+     */
     ItemCursorAdapter mCursorAdapter;
 
     @Override
@@ -53,7 +59,7 @@ public class CatalogActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_catalog);
 
-        // Setup FAB to open EditorActivity
+        // Setting up fab button that will open the EditorActivity
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -63,70 +69,57 @@ public class CatalogActivity extends AppCompatActivity implements
             }
         });
 
-        // Find the ListView which will be populated with the pet data
-        ListView petListView = (ListView) findViewById(R.id.list_view);
+        // Find the ListView which will be populated with the item data
+        ListView itemListView = (ListView) findViewById(R.id.list_view);
 
         // Find and set empty view on the ListView, so that it only shows when the list has 0 items.
         View emptyView = findViewById(R.id.empty_view);
-        petListView.setEmptyView(emptyView);
+        itemListView.setEmptyView(emptyView);
 
-        // Setup an Adapter to create a list item for each row of pet data in the Cursor.
-        // There is no pet data yet (until the loader finishes) so pass in null for the Cursor.
         mCursorAdapter = new ItemCursorAdapter(this, null);
-        petListView.setAdapter(mCursorAdapter);
+        itemListView.setAdapter(mCursorAdapter);
 
         // Setup the item click listener
-        petListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        itemListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-                // Create new intent to go to {@link EditorActivity}
                 Intent intent = new Intent(CatalogActivity.this, EditorActivity.class);
 
-                // Form the content URI that represents the specific pet that was clicked on,
-                // by appending the "id" (passed as input to this method) onto the
-                // {@link ItemContract.ItemEntry#CONTENT_URI}.
-                // For example, the URI would be "content://com.example.android.pets/pets/2"
-                // if the pet with ID 2 was clicked on.
-                Uri currentPetUri = ContentUris.withAppendedId(ItemContract.ItemEntry.CONTENT_URI, id);
+                Uri currentItemUri = ContentUris.withAppendedId(ItemContract.ItemEntry.CONTENT_URI, id);
 
-                // Set the URI on the data field of the intent
-                intent.setData(currentPetUri);
+                intent.setData(currentItemUri);
 
-                // Launch the {@link EditorActivity} to display the data for the current pet.
                 startActivity(intent);
             }
         });
 
-        // Kick off the loader
-        getLoaderManager().initLoader(PET_LOADER, null, this);
+        //  end transmission of loader
+        getLoaderManager().initLoader(ITEM_LOADER, null, this);
     }
 
     /**
-     * Helper method to insert hardcoded pet data into the database. For debugging purposes only.
+     * Helper method to insert hardcoded item data into the database. For debugging purposes only.
      */
-    private void insertPet() {
+    private void insertItem() {
         // Create a ContentValues object where column names are the keys,
-        // and Toto's pet attributes are the values.
+        // and Toto's item attributes are the values.
         ContentValues values = new ContentValues();
-        values.put(ItemContract.ItemEntry.PRODUCT_NAME, "Toto");
-        values.put(ItemContract.ItemEntry.PRICE, "Terrier");
-        values.put(ItemContract.ItemEntry.SUPPLIER_NAME, "LLL");
-        values.put(ItemContract.ItemEntry.SUPPLIER_NAME_NUMBER, "LLL");
-        values.put(ItemContract.ItemEntry.QUANTITY, 7);
+        values.put(ItemContract.ItemEntry.PRODUCT_NAME, getString(R.string.dummy_product_name));
+        values.put(ItemContract.ItemEntry.PRICE, getString(R.string.dummy_product_price));
+        values.put(ItemContract.ItemEntry.SUPPLIER_NAME, getString(R.string.dummy_supplier_name));
+        values.put(ItemContract.ItemEntry.SUPPLIER_PHONE_NUMBER, getString(R.string.dummy_phone_number));
+        values.put(ItemContract.ItemEntry.QUANTITY, 3);
 
-        // Insert a new row for Toto into the provider using the ContentResolver.
-        // Use the {@link ItemContract.ItemEntry#CONTENT_URI} to indicate that we want to insert
-        // into the pets database table.
-        // Receive the new content URI that will allow us to access Toto's data in the future.
+        Log.v ( LOG_TAG, getString(R.string.values_message) );
         Uri newUri = getContentResolver().insert(ItemContract.ItemEntry.CONTENT_URI, values);
     }
 
     /**
-     * Helper method to delete all pets in the database.
+     * Helper method to delete all items in the database.
      */
-    private void deleteAllPets() {
+    private void deleteAllItems() {
         int rowsDeleted = getContentResolver().delete(ItemContract.ItemEntry.CONTENT_URI, null, null);
-        Log.v("CatalogActivity", rowsDeleted + " rows deleted from pet database");
+        Log.v("CatalogActivity", rowsDeleted + getString(R.string.rows_deleted));
     }
 
     @Override
@@ -143,11 +136,11 @@ public class CatalogActivity extends AppCompatActivity implements
         switch (item.getItemId()) {
             // Respond to a click on the "Insert dummy data" menu option
             case R.id.action_insert_dummy_data:
-                insertPet();
+                insertItem();
                 return true;
             // Respond to a click on the "Delete all entries" menu option
             case R.id.action_delete_all_entries:
-                deleteAllPets();
+                deleteAllItems();
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -159,7 +152,9 @@ public class CatalogActivity extends AppCompatActivity implements
         String[] projection = {
                 ItemContract.ItemEntry._ID,
                 ItemContract.ItemEntry.PRODUCT_NAME,
-                ItemContract.ItemEntry.QUANTITY };
+                ItemContract.ItemEntry.PRICE,
+                ItemContract.ItemEntry.QUANTITY
+        };
 
         // This loader will execute the ContentProvider's query method on a background thread
         return new CursorLoader(this,   // Parent activity context
@@ -172,7 +167,7 @@ public class CatalogActivity extends AppCompatActivity implements
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        // Update {@link PetCursorAdapter} with this new cursor containing updated pet data
+        // Update {@link itemCursorAdapter} with this new cursor containing updated item data
         mCursorAdapter.swapCursor(data);
     }
 

@@ -54,7 +54,7 @@ public class ItemContract {
          * <p>
          * Type: TEXT
          */
-        public final static String PRODUCT_NAME = "name";
+        public final static String PRODUCT_NAME = "product_name";
 
         /**
          * Price of the inventory.
@@ -70,18 +70,18 @@ public class ItemContract {
         public final static String QUANTITY = "quantity";
 
         /**
-         * Supplier name of the inventory.
+         * Supplier product_name of the inventory.
          * <p>
          * Type: String
          */
         public final static String SUPPLIER_NAME = "supplier_Name";
 
         /**
-         * Supplier name of the inventory.
+         * Supplier product_name of the inventory.
          * <p>
          * Type: String
          */
-        public final static String SUPPLIER_NAME_NUMBER = "supplier_Phone_Number";
+        public final static String SUPPLIER_PHONE_NUMBER = "supplier_Phone_Number";
 
     }
 }

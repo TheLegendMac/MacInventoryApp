@@ -45,7 +45,7 @@ public class InventoryDbHelper extends SQLiteOpenHelper {
                 + ItemContract.ItemEntry.PRICE + " TEXT, "
                 + ItemContract.ItemEntry.QUANTITY + " INTEGER NOT NULL, "
                 + ItemContract.ItemEntry.SUPPLIER_NAME + " TEXT NOT NULL, "
-                + ItemContract.ItemEntry.SUPPLIER_NAME_NUMBER + " INTEGER NOT NULL DEFAULT 0);";
+                + ItemContract.ItemEntry.SUPPLIER_PHONE_NUMBER + " INTEGER NOT NULL DEFAULT 0);";
         // Execute the SQL statement
         db.execSQL(SQL_CREATE_INVENTORY_TABLE);
     }
