@@ -88,6 +88,8 @@ public class EditorActivity extends AppCompatActivity implements
      */
     private Button decreaseBtn;
 
+    private Boolean goodSave = false;
+
 
     /**
      * Boolean flag that keeps track of whether the item has been edited (true) or not (false)
@@ -195,6 +197,7 @@ public class EditorActivity extends AppCompatActivity implements
      * Get user input from editor and save item into database.
      */
     private void saveItem() {
+        goodSave = false;
         // Read from input fields
         // Use trim to eliminate leading or trailing white space
         String nameString = mNameEditText.getText().toString().trim();
@@ -203,15 +206,18 @@ public class EditorActivity extends AppCompatActivity implements
         String supplierNameString = mSupplierNameEditText.getText().toString().trim();
         String supplierPhoneNumber = mSupplierPhoneNumber.getText().toString().trim();
 
-        // Check if this is supposed to be a new item
-        // and check if all the fields in the editor are blank
-        if (mCurrentItemUri == null &&
-                TextUtils.isEmpty(nameString) && TextUtils.isEmpty(priceString) &&
-                TextUtils.isEmpty(quantityString)) {
-            // Since no fields were modified, we can return early without creating a new item.
+        if (TextUtils.isEmpty(nameString) || TextUtils.isEmpty(quantityString) ||
+                TextUtils.isEmpty(priceString) || TextUtils.isEmpty(supplierNameString) || TextUtils.isEmpty(supplierPhoneNumber)) {
+
+            Toast.makeText(this, "Please fill out all fields", Toast.LENGTH_SHORT).show();
+
+            // Since no fields were modified, we can return early without creating a new book.
             // No need to create ContentValues and no need to do any ContentProvider operations.
             return;
+        } else {
+            goodSave = true;
         }
+
 
         // Create a ContentValues object where column names are the keys,
         // and item attributes from the editor are the values.
@@ -260,6 +266,7 @@ public class EditorActivity extends AppCompatActivity implements
                         Toast.LENGTH_SHORT).show();
             }
         }
+        return;
     }
 
     @Override
@@ -293,8 +300,9 @@ public class EditorActivity extends AppCompatActivity implements
             case R.id.action_save:
                 // Save item to database
                 saveItem();
-                // Exit activity
+                if (goodSave) {
                 finish();
+                }
                 return true;
             // Respond to a click on the "Delete" menu option
             case R.id.action_delete:

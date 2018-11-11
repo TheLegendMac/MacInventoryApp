@@ -83,6 +83,7 @@
                 android:id="@+id/edit_quantity"
                 style="@style/EditorFieldStyle"
                 android:hint="@string/hint_item_quantity"
+                android:text="@string/initial_quantity"
                 android:inputType="number" />
             <Button
                 android:id="@+id/button_increase"

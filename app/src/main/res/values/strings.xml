@@ -105,4 +105,5 @@
     <string name="no_items_to_sell_toast">No more items to sell</string>
     <string name="failed_insert_row_message">Failed to insert row for</string>
     <string name="update_not_supported_message">Update is not supported for</string>
+    <string name="initial_quantity">0</string>
 </resources>
